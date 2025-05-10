@@ -1,4 +1,5 @@
 export type Student = {
-  matricula: string;
-  nome: string;
+  id: string;
+  birth_date: string;
+  name: string;
 };
