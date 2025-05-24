@@ -1,7 +1,7 @@
 "use server";
 
 import { cookies } from "next/headers";
-import { signOut } from "./auth";
+import { getToken, signOut } from "./auth";
 import { User } from "@/types/User";
 
 export async function getCurrentUserInfo(): Promise<User | null> {
@@ -10,15 +10,15 @@ export async function getCurrentUserInfo(): Promise<User | null> {
       return null;
     }
 
-    // Fazer query para pegar os dados do usuário da planilha
+    const jsonUser = await getToken();
 
-    const response: User = {
-      id: "1",
-      birth_date: "2000-01-01",
-      name: "John Doe",
-    };
+    if (!jsonUser) {
+      return null;
+    }
 
-    return response;
+    const user: User = JSON.parse(jsonUser);
+
+    return user;
   } catch (e) {
     console.error(e);
     await signOut();

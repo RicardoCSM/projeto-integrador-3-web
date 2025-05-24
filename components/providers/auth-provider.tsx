@@ -1,3 +1,5 @@
+"use client";
+
 import { getCurrentUserInfo } from "@/app/actions/users";
 import { useAuth } from "@/store/useAuth";
 import { useQuery } from "@tanstack/react-query";

@@ -1,3 +1,5 @@
+"use client";
+
 import { cn } from "@/lib/utils";
 import { Button } from "@/components/ui/button";
 import {
@@ -10,7 +12,7 @@ import {
 import { Input } from "@/components/ui/input";
 import { useForm } from "react-hook-form";
 import { useRouter } from "next/navigation";
-import { useMutation } from "@tanstack/react-query";
+import { useMutation, useQuery } from "@tanstack/react-query";
 import {
   Form,
   FormControl,
@@ -19,13 +21,27 @@ import {
   FormLabel,
   FormMessage,
 } from "@/components/ui/form";
-import { LoaderCircle } from "lucide-react";
+import { Check, ChevronsUpDown, LoaderCircle } from "lucide-react";
 import { loginSchema, LoginSchema } from "@/lib/validations/login";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { login } from "@/app/actions/auth";
 import { toast } from "sonner";
 import DatePicker from "@/components/ui/date-picker";
 import { SetStateAction } from "react";
+import { fetchClasses } from "@/app/actions/students";
+import {
+  Popover,
+  PopoverContent,
+  PopoverTrigger,
+} from "@/components/ui/popover";
+import {
+  Command,
+  CommandEmpty,
+  CommandGroup,
+  CommandInput,
+  CommandItem,
+  CommandList,
+} from "@/components/ui/command";
 
 export function LoginForm({
   className,
@@ -34,11 +50,20 @@ export function LoginForm({
   const form = useForm<LoginSchema>({
     resolver: zodResolver(loginSchema),
     defaultValues: {
+      class: undefined,
       id: "",
       birth_date: "",
     },
   });
   const router = useRouter();
+  const { data: classes = [] } = useQuery({
+    queryKey: ["classes"],
+    queryFn: async () => {
+      const classes = await fetchClasses();
+
+      return classes;
+    },
+  });
 
   const { mutateAsync, status } = useMutation({
     mutationFn: login,
@@ -72,6 +97,77 @@ export function LoginForm({
           <Form {...form}>
             <form onSubmit={form.handleSubmit(onSubmit)}>
               <div className="flex flex-col gap-6">
+                <FormField
+                  control={form.control}
+                  name="class"
+                  render={({ field }) => (
+                    <FormItem>
+                      <FormLabel>Turma</FormLabel>
+                      <FormControl>
+                        <Popover>
+                          <PopoverTrigger asChild>
+                            <FormControl>
+                              <Button
+                                variant="outline"
+                                role="combobox"
+                                disabled={status === "loading"}
+                                className={cn(
+                                  "w-full justify-between",
+                                  !field.value ||
+                                    (field.value !== 0 &&
+                                      "text-muted-foreground")
+                                )}
+                              >
+                                {field.value || field.value === 0
+                                  ? classes.find(
+                                      (classItem) =>
+                                        classItem.index === field.value
+                                    )?.title
+                                  : "Selecione a turma"}
+                                <ChevronsUpDown className="opacity-50" />
+                              </Button>
+                            </FormControl>
+                          </PopoverTrigger>
+                          <PopoverContent className="w-[200px] p-0">
+                            <Command>
+                              <CommandInput
+                                placeholder="Selecionar turma..."
+                                className="h-9"
+                              />
+                              <CommandList>
+                                <CommandEmpty>
+                                  Nenhuma turma encontrada
+                                </CommandEmpty>
+                                <CommandGroup>
+                                  {classes.map((classItem) => (
+                                    <CommandItem
+                                      value={classItem.index.toString()}
+                                      key={classItem.index}
+                                      onSelect={() => {
+                                        form.setValue("class", classItem.index);
+                                      }}
+                                    >
+                                      {classItem.title}
+                                      <Check
+                                        className={cn(
+                                          "ml-auto",
+                                          classItem.index === field.value
+                                            ? "opacity-100"
+                                            : "opacity-0"
+                                        )}
+                                      />
+                                    </CommandItem>
+                                  ))}
+                                </CommandGroup>
+                              </CommandList>
+                            </Command>
+                          </PopoverContent>
+                        </Popover>
+                      </FormControl>
+                      <FormMessage />
+                    </FormItem>
+                  )}
+                />
                 <FormField
                   control={form.control}
                   name="id"
@@ -120,12 +216,6 @@ export function LoginForm({
                   )}
                   Entrar
                 </Button>
-              </div>
-              <div className="mt-4 text-center text-sm">
-                Não consegue acessar sua conta?{" "}
-                <a href="#" className="underline underline-offset-4">
-                  Suporte
-                </a>
               </div>
             </form>
           </Form>

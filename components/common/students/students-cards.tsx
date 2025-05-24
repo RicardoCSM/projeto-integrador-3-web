@@ -14,6 +14,7 @@ import {
 import { Student } from "@/types/Student";
 import React from "react";
 import QRCode from "qrcode";
+import CryptoJS from "crypto-js";
 
 Font.register({
   family: "Lato",
@@ -32,6 +33,8 @@ Font.register({
     },
   ],
 });
+
+const SECRET_KEY = process.env.AUTH_SECRET_KEY || "";
 
 const studentStyles = StyleSheet.create({
   page: {
@@ -60,7 +63,20 @@ export const generateSessionPDFQrCode = async ({
 }: {
   student: Student;
 }): Promise<string> => {
-  return await QRCode.toDataURL(student.id, {
+  const encryptedData = CryptoJS.AES.encrypt(
+    JSON.stringify({
+      id: student.id,
+      name: student.name,
+      birth_date: student.birth_date,
+      class: {
+        index: student.class?.index,
+        name: student.class?.name,
+      },
+    }),
+    SECRET_KEY
+  ).toString();
+
+  return await QRCode.toDataURL(encryptedData, {
     errorCorrectionLevel: "H",
   });
 };

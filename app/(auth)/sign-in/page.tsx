@@ -2,12 +2,10 @@
 
 import { LoginForm } from "@/components/common/auth/login-form";
 import { ModeToggle } from "@/components/theme-toggle";
-import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
-const queryClient = new QueryClient();
 
 export default function SignIn() {
   return (
-    <QueryClientProvider client={queryClient}>
+    <>
       <div className="absolute top-4 right-4">
         <ModeToggle />
       </div>
@@ -16,6 +14,6 @@ export default function SignIn() {
           <LoginForm />
         </div>
       </div>
-    </QueryClientProvider>
+    </>
   );
 }

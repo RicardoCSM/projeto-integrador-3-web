@@ -1,6 +1,7 @@
 import * as z from "zod";
 
 export const loginSchema = z.object({
+  class: z.coerce.number(),
   id: z.string().min(1, { message: "Número de matrícula é obrigatório" }),
   birth_date: z
     .string()

@@ -3,6 +3,8 @@
 import { cookies } from "next/headers";
 import CryptoJS from "crypto-js";
 import { LoginSchema } from "@/lib/validations/login";
+import { fetchStudents } from "@/app/actions/students";
+import { formatDate } from "date-fns";
 
 const SECRET_KEY = process.env.AUTH_SECRET_KEY || "";
 
@@ -25,12 +27,40 @@ export async function login(data: LoginSchema): Promise<{
   message: string;
 }> {
   try {
-    console.log("Login data:", data);
-    // Verificar as credenciais do usuário na planilha
+    const students = await fetchStudents(data.class);
+
+    if (!students || students.length === 0) {
+      return {
+        success: false,
+        message: "Nenhum aluno encontrado para a turma informada.",
+      };
+    }
+
+    const formattedBirthDate = formatDate(data.birth_date, "dd/MM/yyyy");
+
+    const student = students.find(
+      (student) =>
+        student.id === data.id && student.birth_date === formattedBirthDate
+    );
+
+    if (!student) {
+      return {
+        success: false,
+        message: "Credenciais inválidas!",
+      };
+    }
 
     const expires = new Date(Date.now() + 24 * 60 * 60 * 1000);
     const encryptedToken = CryptoJS.AES.encrypt(
-      "some_token",
+      JSON.stringify({
+        id: student.id,
+        name: student.name,
+        birth_date: student.birth_date,
+        class: {
+          index: student.class?.index,
+          name: student.class?.name,
+        },
+      }),
       SECRET_KEY
     ).toString();
     (await cookies()).set("access_token", encryptedToken, {

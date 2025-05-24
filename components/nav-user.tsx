@@ -85,7 +85,7 @@ export function NavUser({ user }: { user: User }) {
             </DropdownMenuLabel>
             <DropdownMenuSeparator />
             <DropdownMenuGroup>
-              <Link href="/read" target="_blank">
+              <Link href="/card" target="_blank">
                 <DropdownMenuItem>
                   <UserCircleIcon />
                   Carteirinha

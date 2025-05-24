@@ -3,11 +3,37 @@
 import { doc } from "@/services/google-spreadsheets";
 import { Student } from "@/types/Student";
 
-export async function fetchStudents() {
+export async function fetchClasses() {
+  try {
+    await doc.loadInfo();
+    const classes: {
+      index: number;
+      title: string;
+    }[] = [];
+
+    for (let i = 0; i < doc.sheetCount - 1; i++) {
+      const sheet = doc.sheetsByIndex[i];
+      classes.push({
+        index: i,
+        title: sheet.title,
+      });
+    }
+
+    return classes;
+  } catch (error) {
+    throw new Error("Erro ao buscar estudantes: " + error);
+  }
+}
+
+export async function fetchStudents(classIndex: number) {
   try {
     await doc.loadInfo();
 
-    const sheet = doc.sheetsByIndex[0];
+    if (classIndex < 0 || classIndex >= doc.sheetCount) {
+      throw new Error("Índice de classe inválido");
+    }
+
+    const sheet = doc.sheetsByIndex[classIndex];
     const data: string[][] = await sheet.getCellsInRange("A4:D100");
 
     const students = data
@@ -20,6 +46,10 @@ export async function fetchStudents() {
           birth_date: student[2],
           name: student[3],
           position: index + 4,
+          class: {
+            index: classIndex,
+            name: sheet.title,
+          },
         };
       })
       .filter((student) => student !== null) as Student[];
