@@ -7,4 +7,22 @@ const serviceAccountAuth = new JWT({
   scopes: ['https://www.googleapis.com/auth/spreadsheets'],
 });
 
-export const doc = new GoogleSpreadsheet(process.env.GOOGLE_SHEET_ID ?? "", serviceAccountAuth);
+const doc1 = new GoogleSpreadsheet(process.env.BIMESTRE_1_GOOGLE_SHEET_ID ?? "", serviceAccountAuth);
+const doc2 = new GoogleSpreadsheet(process.env.BIMESTRE_2_GOOGLE_SHEET_ID ?? "", serviceAccountAuth);
+const doc3 = new GoogleSpreadsheet(process.env.BIMESTRE_3_GOOGLE_SHEET_ID ?? "", serviceAccountAuth);
+const doc4 = new GoogleSpreadsheet(process.env.BIMESTRE_4_GOOGLE_SHEET_ID ?? "", serviceAccountAuth);
+
+export const getDoc = (bimestre: number): GoogleSpreadsheet => {
+  switch(bimestre) {
+    case 1: 
+      return doc1;
+    case 2:
+      return doc2;
+    case 3:
+      return doc3;
+    case 4:
+      return doc4;
+    default:
+      return doc1;
+  }
+}

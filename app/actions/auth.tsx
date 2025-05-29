@@ -56,6 +56,7 @@ export async function login(data: LoginSchema): Promise<{
         id: student.id,
         name: student.name,
         birth_date: student.birth_date,
+        position: student.position,
         class: {
           index: student.class?.index,
           name: student.class?.name,

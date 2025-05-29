@@ -1,11 +1,12 @@
 "use server";
 
-import { doc } from "@/services/google-spreadsheets";
+import { getDoc } from "@/services/google-spreadsheets";
 import { Student } from "@/types/Student";
 
-export async function fetchClasses() {
+export async function fetchClasses(bimestre: number = 1) {
   try {
-    await doc.loadInfo();
+    const doc = getDoc(bimestre);
+    await doc.loadInfo()
     const classes: {
       index: number;
       title: string;
@@ -25,9 +26,10 @@ export async function fetchClasses() {
   }
 }
 
-export async function fetchStudents(classIndex: number) {
+export async function fetchStudents(classIndex: number, bimestre: number = 1) {
   try {
-    await doc.loadInfo();
+     const doc = getDoc(bimestre);
+    await doc.loadInfo()
 
     if (classIndex < 0 || classIndex >= doc.sheetCount) {
       throw new Error("Índice de classe inválido");
