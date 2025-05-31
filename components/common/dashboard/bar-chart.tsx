@@ -1,14 +1,11 @@
-// components/grafico-bar.tsx
-"use client"; // Se o seu gráfico usa hooks (como os do Recharts), ele precisa ser um Client Component
+"use client";
 
-import { TrendingUp } from "lucide-react";
 import { Bar, BarChart, CartesianGrid, XAxis } from "recharts";
 
 import {
   Card,
   CardContent,
   CardDescription,
-  CardFooter,
   CardHeader,
   CardTitle,
 } from "@/components/ui/card";
@@ -18,26 +15,16 @@ import {
   ChartTooltip,
   ChartTooltipContent,
 } from "@/components/ui/chart";
-
-interface FaltasData {
-  day: string;
-  faltas: number;
-}
-
-// O componente agora espera a prop 'data'
-interface ChartAreaInteractiveProps {
-  data: FaltasData[];
-}
+import { BarChartData } from "@/types/Dashboard";
 
 const chartConfig = {
-  faltas: {
+  absences: {
     label: "Faltas",
     color: "var(--chart-1)",
   },
 } satisfies ChartConfig;
 
-// Receba a prop 'data' aqui
-export function ChartAreaInteractive({ data }: ChartAreaInteractiveProps) {
+export function DashboardBarChart({ data }: { data: BarChartData[] }) {
   return (
     <Card>
       <CardHeader>
@@ -45,8 +32,7 @@ export function ChartAreaInteractive({ data }: ChartAreaInteractiveProps) {
         <CardDescription>Segunda - Sábado</CardDescription>
       </CardHeader>
       <CardContent className="px-3">
-        <ChartContainer config={chartConfig} className="h-[300px]">
-          {/* Use 'data' aqui para renderizar o gráfico */}
+        <ChartContainer config={chartConfig}>
           <BarChart accessibilityLayer data={data}>
             <CartesianGrid vertical={false} />
             <XAxis
@@ -60,7 +46,7 @@ export function ChartAreaInteractive({ data }: ChartAreaInteractiveProps) {
               cursor={false}
               content={<ChartTooltipContent hideLabel />}
             />
-            <Bar dataKey="faltas" fill="var(--color-faltas)" radius={8} />
+            <Bar dataKey="absences" fill="var(--color-absences)" radius={8} />
           </BarChart>
         </ChartContainer>
       </CardContent>

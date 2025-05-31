@@ -48,12 +48,10 @@ const studentStyles = StyleSheet.create({
     flex: 1,
   },
   card: {
-    width: "400px",
+    width: "525px",
+    height: "300px",
     border: "1px solid #000",
-    borderRadius: 10,
-    padding: 20,
     flexDirection: "row",
-    gap: 20,
     alignItems: "center",
   },
 });
@@ -93,16 +91,114 @@ const StudentCard = ({
     <Page {...props} style={studentStyles.page}>
       <View style={studentStyles.container}>
         <View style={studentStyles.card}>
-          {/* eslint-disable-next-line jsx-a11y/alt-text */}
-          <Image style={{ width: 120 }} src={QRCode} />
-          <View style={{ flexDirection: "column", gap: 10, padding: 10 }}>
-            <Text style={{ fontSize: 16, fontWeight: "bold" }}>
-              {student.name}
+          <View
+            style={{
+              height: "100%",
+              backgroundColor: "#168a43",
+              width: "80px",
+              borderTopRightRadius: "20px",
+              borderBottomRightRadius: "20px",
+              padding: "5px",
+              display: "flex",
+              flexDirection: "row",
+              gap: "5px",
+              alignItems: "center",
+            }}
+          >
+            <View
+              style={{
+                borderTopRightRadius: "100%",
+                borderTopLeftRadius: "100%",
+                borderBottomRightRadius: "100%",
+                borderBottomLeftRadius: "100%",
+                height: "95%",
+                width: "4px",
+                backgroundColor: "#ffffff",
+              }}
+            ></View>
+            <View
+              style={{
+                borderTopRightRadius: "100%",
+                borderTopLeftRadius: "100%",
+                borderBottomRightRadius: "100%",
+                borderBottomLeftRadius: "100%",
+                height: "85%",
+                width: "4px",
+                backgroundColor: "#ffffff",
+              }}
+            ></View>
+          </View>
+          <View
+            style={{
+              display: "flex",
+              flexDirection: "column",
+              justifyContent: "center",
+              alignItems: "center",
+              flex: 1,
+              height: "100%",
+              gap: 20,
+            }}
+          >
+            <Text
+              style={{
+                fontSize: 20,
+                fontWeight: "bold",
+                color: "#168a43",
+              }}
+            >
+              ESCOLA ESTADUAL ALBERTO AZEVEDO
             </Text>
-            <Text style={{ fontSize: 16 }}>
-              {student.birth_date.toString()}
-            </Text>
-            <Text style={{ fontSize: 16 }}>Nº de Matrícula: {student.id}</Text>
+            <View
+              style={{
+                display: "flex",
+                flexDirection: "row",
+                alignItems: "center",
+                gap: 20,
+                width: "90%",
+              }}
+            >
+              <View
+                style={{
+                  flexDirection: "column",
+                  gap: 6,
+                  padding: 10,
+                }}
+              >
+                <Text
+                  style={{
+                    fontSize: 18,
+                    fontWeight: "bold",
+                    color: "#168a43",
+                    paddingRight: 10,
+                  }}
+                >
+                  {student.name.split("").map((char, index) => {
+                    return <Text key={index}>{char}</Text>;
+                  })}
+                </Text>
+                <Text style={{ fontSize: 16 }}>
+                  {student.birth_date.toString()}
+                </Text>
+                <Text style={{ fontWeight: "bold", fontSize: 20 }}>
+                  Nº de Matrícula:{" "}
+                  <Text style={{ color: "#168a43" }}>{student.id}</Text>
+                </Text>
+              </View>
+              <View>
+                {/* eslint-disable-next-line jsx-a11y/alt-text */}
+                <Image style={{ width: 120 }} src={QRCode} />
+              </View>
+            </View>
+            {/* eslint-disable-next-line jsx-a11y/alt-text */}
+            <Image
+              style={{
+                width: "50px",
+                position: "absolute",
+                bottom: "10px",
+                right: "10px",
+              }}
+              src="images/logo-eeaa.png"
+            />
           </View>
         </View>
       </View>

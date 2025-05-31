@@ -42,6 +42,7 @@ import {
   CommandItem,
   CommandList,
 } from "@/components/ui/command";
+import Image from "next/image";
 
 export function LoginForm({
   className,
@@ -88,15 +89,26 @@ export function LoginForm({
     <div className={cn("flex flex-col gap-6", className)} {...props}>
       <Card>
         <CardHeader>
-          <CardTitle className="text-2xl">Login</CardTitle>
-          <CardDescription>
+          <div className="flex items-center justify-center mb-4">
+            <Image
+              src="/images/logo-eeaa.png"
+              alt="Logo EEAA"
+              width={60}
+              height={60}
+              priority
+            />
+          </div>
+          <CardTitle className="text-3xl text-center">
+            Bem-vindo de volta!
+          </CardTitle>
+          <CardDescription className="text-center">
             Entre com suas credenciais para acessar o sistema.
           </CardDescription>
         </CardHeader>
         <CardContent>
           <Form {...form}>
             <form onSubmit={form.handleSubmit(onSubmit)}>
-              <div className="flex flex-col gap-6">
+              <div className="flex flex-col gap-4">
                 <FormField
                   control={form.control}
                   name="class"
@@ -111,12 +123,7 @@ export function LoginForm({
                                 variant="outline"
                                 role="combobox"
                                 disabled={status === "loading"}
-                                className={cn(
-                                  "w-full justify-between",
-                                  !field.value ||
-                                    (field.value !== 0 &&
-                                      "text-muted-foreground")
-                                )}
+                                className="w-full justify-between text-muted-foreground"
                               >
                                 {field.value || field.value === 0
                                   ? classes.find(
@@ -210,7 +217,10 @@ export function LoginForm({
                     </FormItem>
                   )}
                 />
-                <Button className="w-full" disabled={status === "loading"}>
+                <Button
+                  className="bg-[#168a43] w-full"
+                  disabled={status === "loading"}
+                >
                   {status === "loading" && (
                     <LoaderCircle className="mr-2 h-4 w-4 animate-spin" />
                   )}

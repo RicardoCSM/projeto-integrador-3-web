@@ -1,61 +1,53 @@
-"use client"
+"use client";
 
-import * as React from "react"
-import { Label, Pie, PieChart, Sector } from "recharts"
-import { PieSectorDataItem } from "recharts/types/polar/Pie"
+import * as React from "react";
+import { Label, Pie, PieChart, Sector } from "recharts";
+import { PieSectorDataItem } from "recharts/types/polar/Pie";
 
-import {
-  Card,
-  CardContent,
-  CardDescription,
-  CardHeader,
-  CardTitle,
-} from "@/components/ui/card"
+import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import {
   ChartConfig,
   ChartContainer,
   ChartStyle,
   ChartTooltip,
   ChartTooltipContent,
-} from "@/components/ui/chart"
+} from "@/components/ui/chart";
 import {
   Select,
   SelectContent,
   SelectItem,
   SelectTrigger,
   SelectValue,
-} from "@/components/ui/select"
-import { PieChartData } from "@/app/actions/dashboard"
+} from "@/components/ui/select";
+import { PieChartData } from "@/types/Dashboard";
 
 const chartConfig = {
-  quantidade: {
-    label: "quantidade",
+  count: {
+    label: "Quantidade",
   },
-  faltas: {
+  absences: {
     label: "Faltas",
     color: "var(--chart-1)",
   },
-  presencas: {
+  attendances: {
     label: "Presenças",
     color: "var(--chart-2)",
   },
-  faltasJustificadas: {
+  justifiedAbsences: {
     label: "Faltas Justificadas",
     color: "var(--chart-3)",
   },
-} satisfies ChartConfig
+} satisfies ChartConfig;
 
-export function DashboardPieChart({quantidadeData} : {
-    quantidadeData: PieChartData[];
-}) {
-  const id = "pie-interactive"
-  const [activeMonth, setActiveMonth] = React.useState(quantidadeData[0].key)
+export function DashboardPieChart({ data }: { data: PieChartData[] }) {
+  const id = "pie-interactive";
+  const [activeMonth, setActiveMonth] = React.useState(data[0].key);
 
   const activeIndex = React.useMemo(
-    () => quantidadeData.findIndex((item) => item.key === activeMonth),
-    [activeMonth]
-  )
-  const months = React.useMemo(() => quantidadeData.map((item) => item.key), [])
+    () => data.findIndex((item) => item.key === activeMonth),
+    [activeMonth, data]
+  );
+  const months = React.useMemo(() => data.map((item) => item.key), [data]);
 
   return (
     <Card data-chart={id} className="flex flex-col">
@@ -73,10 +65,10 @@ export function DashboardPieChart({quantidadeData} : {
           </SelectTrigger>
           <SelectContent align="end" className="rounded-xl">
             {months.map((key) => {
-              const config = chartConfig[key as keyof typeof chartConfig]
+              const config = chartConfig[key as keyof typeof chartConfig];
 
               if (!config) {
-                return null
+                return null;
               }
 
               return (
@@ -95,7 +87,7 @@ export function DashboardPieChart({quantidadeData} : {
                     {config?.label}
                   </div>
                 </SelectItem>
-              )
+              );
             })}
           </SelectContent>
         </Select>
@@ -109,11 +101,13 @@ export function DashboardPieChart({quantidadeData} : {
           <PieChart>
             <ChartTooltip
               cursor={false}
-              content={<ChartTooltipContent className="min-w-[10rem]" hideLabel />}
+              content={
+                <ChartTooltipContent className="min-w-[10rem]" hideLabel />
+              }
             />
             <Pie
-              data={quantidadeData}
-              dataKey="quantidade"
+              data={data}
+              dataKey="count"
               nameKey="key"
               innerRadius={60}
               strokeWidth={5}
@@ -147,7 +141,7 @@ export function DashboardPieChart({quantidadeData} : {
                           y={viewBox.cy}
                           className="fill-foreground text-3xl font-bold"
                         >
-                          {quantidadeData[activeIndex].quantidade.toLocaleString()}
+                          {data[activeIndex].count.toLocaleString()}
                         </tspan>
                         <tspan
                           x={viewBox.cx}
@@ -157,7 +151,7 @@ export function DashboardPieChart({quantidadeData} : {
                           Valor
                         </tspan>
                       </text>
-                    )
+                    );
                   }
                 }}
               />
@@ -166,5 +160,5 @@ export function DashboardPieChart({quantidadeData} : {
         </ChartContainer>
       </CardContent>
     </Card>
-  )
+  );
 }

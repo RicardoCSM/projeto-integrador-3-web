@@ -6,7 +6,7 @@ import { Student } from "@/types/Student";
 export async function fetchClasses(bimestre: number = 1) {
   try {
     const doc = getDoc(bimestre);
-    await doc.loadInfo()
+    await doc.loadInfo();
     const classes: {
       index: number;
       title: string;
@@ -22,14 +22,14 @@ export async function fetchClasses(bimestre: number = 1) {
 
     return classes;
   } catch (error) {
-    throw new Error("Erro ao buscar estudantes: " + error);
+    throw new Error("Erro ao buscar turmas: " + error);
   }
 }
 
 export async function fetchStudents(classIndex: number, bimestre: number = 1) {
   try {
-     const doc = getDoc(bimestre);
-    await doc.loadInfo()
+    const doc = getDoc(bimestre);
+    await doc.loadInfo();
 
     if (classIndex < 0 || classIndex >= doc.sheetCount) {
       throw new Error("Índice de classe inválido");
