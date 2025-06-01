@@ -11,7 +11,7 @@ export default async function HomeLayout({
   const token = await getToken();
 
   if (!token) {
-    return redirect("/sign-in");
+    redirect("/sign-in");
   }
 
   return (

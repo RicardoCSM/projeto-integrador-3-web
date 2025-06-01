@@ -10,12 +10,15 @@ import { DashboardPieChart } from "@/components/common/dashboard/pie-chart";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import { useState } from "react";
 import { Skeleton } from "@/components/ui/skeleton";
+import { LoaderCircle } from "lucide-react";
 
 export default function Dashboard() {
   const [bimestre, setBimestre] = useState<number>(1);
   const { user } = useAuth();
+
   const { isLoading, error, data } = useQuery({
     queryKey: ["dashboard", user?.id, bimestre],
+    enabled: !!user?.id,
     queryFn: async () => {
       if (!user || !user.class) {
         throw new Error("Usuário inválido!");
@@ -28,6 +31,14 @@ export default function Dashboard() {
 
   if (error) {
     return <>Error: {error}</>;
+  }
+
+  if (!user) {
+    return (
+      <div className="flex h-screen w-full items-center justify-center">
+        <LoaderCircle className="h-10 w-10 animate-spin text-primary" />
+      </div>
+    );
   }
 
   return (

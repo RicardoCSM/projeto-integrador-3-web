@@ -10,7 +10,7 @@ export default async function HomeLayout({
   const token = await getToken();
 
   if (token) {
-    return redirect("/dashboard");
+    redirect("/dashboard");
   }
 
   return <QueryProvider>{children}</QueryProvider>;
