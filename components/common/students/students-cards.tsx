@@ -36,26 +36,6 @@ Font.register({
 
 const SECRET_KEY = process.env.AUTH_SECRET_KEY || "";
 
-const studentStyles = StyleSheet.create({
-  page: {
-    fontFamily: "Lato",
-  },
-  container: {
-    display: "flex",
-    flexDirection: "column",
-    justifyContent: "center",
-    alignItems: "center",
-    flex: 1,
-  },
-  card: {
-    width: "525px",
-    height: "300px",
-    border: "1px solid #000",
-    flexDirection: "row",
-    alignItems: "center",
-  },
-});
-
 export const generateSessionPDFQrCode = async ({
   student,
 }: {
@@ -80,6 +60,63 @@ export const generateSessionPDFQrCode = async ({
   });
 };
 
+const styles = StyleSheet.create({
+  page: {
+    backgroundColor: "#ffffff",
+    padding: 5,
+  },
+  card: {
+    width: "100%",
+    height: "100%",
+    display: "flex",
+    flexDirection: "column",
+    border: "1px solid #168a43",
+    borderRadius: 3,
+  },
+  header: {
+    display: "flex",
+    flexDirection: "row",
+    gap: 10,
+    alignItems: "center",
+    marginBottom: 6,
+    padding: 3,
+  },
+  schoolName: {
+    fontSize: 8,
+    fontWeight: "bold",
+    color: "#168a43",
+  },
+  idText: {
+    fontSize: 6,
+  },
+  content: {
+    display: "flex",
+    flexDirection: "row",
+    flexGrow: 1,
+    marginBottom: 4,
+    padding: 6,
+  },
+  qrSection: {
+    display: "flex",
+    alignItems: "center",
+    justifyContent: "center",
+    marginTop: 4,
+    marginBottom: 4,
+  },
+  footer: {
+    width: "100%",
+    backgroundColor: "#168a43",
+    height: "25px",
+    borderTopRightRadius: "8px",
+    borderTopLeftRadius: "8px",
+    padding: "5px",
+    display: "flex",
+    flexDirection: "column",
+    gap: "5px",
+    alignItems: "center",
+  },
+});
+
 const StudentCard = ({
   student,
   ...props
@@ -89,118 +126,78 @@ const StudentCard = ({
   const QRCode = generateSessionPDFQrCode({ student });
 
   return (
-    <Page {...props} style={studentStyles.page}>
-      <View style={studentStyles.container}>
-        <View style={studentStyles.card}>
-          <View
+    <Page {...props} size={[153.07, 242.65]} style={styles.page}>
+      <View style={styles.card}>
+        <View style={styles.header}>
+          {/* eslint-disable-next-line jsx-a11y/alt-text */}
+          <Image
             style={{
-              height: "100%",
-              backgroundColor: "#168a43",
-              width: "80px",
-              borderTopRightRadius: "20px",
-              borderBottomRightRadius: "20px",
-              padding: "5px",
-              display: "flex",
-              flexDirection: "row",
-              gap: "5px",
-              alignItems: "center",
+              width: "25px",
             }}
-          >
-            <View
-              style={{
-                borderTopRightRadius: "100%",
-                borderTopLeftRadius: "100%",
-                borderBottomRightRadius: "100%",
-                borderBottomLeftRadius: "100%",
-                height: "95%",
-                width: "4px",
-                backgroundColor: "#ffffff",
-              }}
-            ></View>
-            <View
-              style={{
-                borderTopRightRadius: "100%",
-                borderTopLeftRadius: "100%",
-                borderBottomRightRadius: "100%",
-                borderBottomLeftRadius: "100%",
-                height: "85%",
-                width: "4px",
-                backgroundColor: "#ffffff",
-              }}
-            ></View>
-          </View>
+            src="images/logo-eeaa.png"
+          />
+          <Text style={styles.schoolName}>E.E. ALBERTO AZEVEDO</Text>
+        </View>
+
+        <View style={styles.content}>
           <View
             style={{
               display: "flex",
+              flex: 1,
               flexDirection: "column",
               justifyContent: "center",
-              alignItems: "center",
-              flex: 1,
-              height: "100%",
-              gap: 20,
+              gap: 6,
+              textAlign: "center",
             }}
           >
             <Text
               style={{
-                fontSize: 20,
+                fontSize: 9,
                 fontWeight: "bold",
                 color: "#168a43",
+                paddingRight: 10,
               }}
             >
-              ESCOLA ESTADUAL ALBERTO AZEVEDO
+              {student.name.split("").map((char, index) => {
+                return <Text key={index}>{char}</Text>;
+              })}
             </Text>
-            <View
-              style={{
-                display: "flex",
-                flexDirection: "row",
-                alignItems: "center",
-                gap: 20,
-                width: "90%",
-              }}
-            >
-              <View
-                style={{
-                  flexDirection: "column",
-                  gap: 6,
-                  padding: 10,
-                }}
-              >
-                <Text
-                  style={{
-                    fontSize: 18,
-                    fontWeight: "bold",
-                    color: "#168a43",
-                    paddingRight: 10,
-                  }}
-                >
-                  {student.name.split("").map((char, index) => {
-                    return <Text key={index}>{char}</Text>;
-                  })}
-                </Text>
-                <Text style={{ fontSize: 16 }}>
-                  {student.birth_date.toString()}
-                </Text>
-                <Text style={{ fontWeight: "bold", fontSize: 20 }}>
-                  Nº de Matrícula:{" "}
-                  <Text style={{ color: "#168a43" }}>{student.id}</Text>
-                </Text>
-              </View>
-              <View>
-                {/* eslint-disable-next-line jsx-a11y/alt-text */}
-                <Image style={{ width: 120 }} src={QRCode} />
-              </View>
-            </View>
-            {/* eslint-disable-next-line jsx-a11y/alt-text */}
-            <Image
-              style={{
-                width: "50px",
-                position: "absolute",
-                bottom: "10px",
-                right: "10px",
-              }}
-              src="images/logo-eeaa.png"
-            />
+            <Text style={{ fontSize: 8 }}>{student.birth_date.toString()}</Text>
+            <Text style={{ fontWeight: "bold", fontSize: 8 }}>
+              Nº de Matrícula:{" "}
+              <Text style={{ color: "#168a43" }}>{student.id}</Text>
+            </Text>
           </View>
+        </View>
+
+        <View style={styles.qrSection}>
+          {/* eslint-disable-next-line jsx-a11y/alt-text */}
+          <Image style={{ width: 120, height: 120 }} src={QRCode} />
+        </View>
+
+        <View style={styles.footer}>
+          <View
+            style={{
+              borderTopRightRadius: "100%",
+              borderTopLeftRadius: "100%",
+              borderBottomRightRadius: "100%",
+              borderBottomLeftRadius: "100%",
+              width: "85%",
+              height: "1.5px",
+              backgroundColor: "#ffffff",
+            }}
+          />
+          <View
+            style={{
+              borderTopRightRadius: "100%",
+              borderTopLeftRadius: "100%",
+              borderBottomRightRadius: "100%",
+              borderBottomLeftRadius: "100%",
+              width: "95%",
+              height: "1.5px",
+              backgroundColor: "#ffffff",
+            }}
+          />
         </View>
       </View>
     </Page>
