@@ -3,6 +3,11 @@
 import { getDoc } from "@/services/google-spreadsheets";
 import { Student } from "@/types/Student";
 
+/**
+ * Função para buscar as turmas disponíveis em um bimestre específico.
+ * @param bimestre - O bimestre para o qual as turmas devem ser buscadas (default é 1).
+ * @returns Uma lista de objetos representando as turmas, cada um com um índice e título.
+ */
 export async function fetchClasses(bimestre: number = 1) {
   try {
     const doc = getDoc(bimestre);
@@ -22,10 +27,17 @@ export async function fetchClasses(bimestre: number = 1) {
 
     return classes;
   } catch (error) {
-    throw new Error("Erro ao buscar turmas: " + error);
+    console.error("Erro ao buscar turmas:", error);
+    return [];
   }
 }
 
+/**
+ * Função para buscar os estudantes de uma turma específica em um bimestre.
+ * @param classIndex - O índice da turma para a qual os estudantes devem ser buscados.
+ * @param bimestre - O bimestre para o qual os estudantes devem ser buscados (default é 1).
+ * @returns Uma lista de objetos representando os estudantes, cada um com id, data de nascimento, nome, posição e informações da turma.
+ */
 export async function fetchStudents(classIndex: number, bimestre: number = 1) {
   try {
     const doc = getDoc(bimestre);
@@ -58,6 +70,7 @@ export async function fetchStudents(classIndex: number, bimestre: number = 1) {
 
     return students;
   } catch (error) {
-    throw new Error("Erro ao buscar estudantes: " + error);
+    console.error("Erro ao buscar estudantes:", error);
+    return [];
   }
 }

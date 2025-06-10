@@ -4,6 +4,10 @@ import { cookies } from "next/headers";
 import { getToken, signOut } from "./auth";
 import { User } from "@/types/User";
 
+/**
+ * Função para obter as informações do usuário atual.
+ * @returns Um objeto User com as informações do usuário ou null se não estiver autenticado.
+ */
 export async function getCurrentUserInfo(): Promise<User | null> {
   try {
     if (!(await cookies()).get("access_token")) {

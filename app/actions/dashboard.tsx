@@ -4,6 +4,16 @@ import { getDoc } from "@/services/google-spreadsheets";
 import { BarChartData, Cards, PieChartData } from "@/types/Dashboard";
 import { User } from "@/types/User";
 
+/**
+ * Busca os dados do dashboard de um usuário específico para um bimestre.
+ *
+ * Obtém os dados de presença e faltas do usuário a partir de uma planilha do Google Sheets,
+ * processa esses dados e retorna informações estruturadas para gráficos e cartões.
+ *
+ * @param user - O usuário cujos dados serão buscados.
+ * @param bimestre - O bimestre para o qual os dados serão buscados (padrão é 1).
+ * @returns Um objeto contendo os dados dos gráficos e cartões ou null em caso de erro.
+ */
 export async function fetchDashboard(
   user: User,
   bimestre: number = 1
@@ -92,6 +102,12 @@ export async function fetchDashboard(
   }
 }
 
+/**
+ * Monta um array de dados para o gráfico de barras a partir do mapa de ausências.
+ *
+ * @param absencesMap - Um objeto que mapeia os dias da semana para o número de ausências.
+ * @return Um array de objetos contendo o dia da semana e o número de ausências.
+ * */
 const mountBarChartArray = (
   absencesMap: Record<string, number>
 ): BarChartData[] => {
@@ -105,6 +121,12 @@ const mountBarChartArray = (
   ];
 };
 
+/**
+ * Monta um array de dados para o gráfico de pizza a partir do mapa de ausências.
+ *
+ * @param pieChartMap - Um objeto que mapeia os tipos de presença para o número de ocorrências.
+ * @return Um array de objetos contendo o tipo de presença, a contagem e a cor associada.
+ */
 const mountPieChartArray = (
   pieChartMap: Record<string, number>
 ): PieChartData[] => {

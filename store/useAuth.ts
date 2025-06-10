@@ -7,6 +7,11 @@ type AuthState = {
   removeUser: () => void;
 };
 
+/**
+ * Cria um estado global de autenticação usando Zustand.
+ *
+ * @typedef {Object} AuthState
+ */
 const useAuth = create<AuthState>((set) => ({
   user: null,
   setUser: (user: User) => set({ user }),
